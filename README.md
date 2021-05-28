@@ -1,23 +1,24 @@
 # Cross Compiling a Rust + Python project in GitLab CI
 
 
-So, this project doesn't do anything magical, but it is an attempt to get a
-sustainable CI/CD pipeline set up  targetting  armv7 (arm32, armhf, etc)
-Debian, in GitLab CI.
+So, this project doesn't do anything completely unique. It is an attempt to
+get a sustainable CI/CD pipeline set up  targetting armhf (arm32, armv7, etc)
+Debian compatible Python wheels in GitLab CI.
 
 This project uses the following:
 
-[Maturin](https://github.com/PyO3/maturin)
-[PyO3](https://github.com/PyO3/pyo3)
-[Debian](https://www.debian.org/)
+- [Maturin](https://github.com/PyO3/maturin)
+- [PyO3](https://github.com/PyO3/pyo3)
+- [Debian](https://www.debian.org/)
 
-The goal is to build a Python wheel that can be installed on an Debian armhf
-system with "pip install".
+The goal is to build a Python wheel that can be installed on an Debian buster
+armhf system with "pip install".
 
 
 ## Minimal rust code example
 
-	I started with an example crate from the maturin project:
+I started with an example crate from the maturin project:
+
 	https://github.com/PyO3/maturin/tree/main/test-crates/pyo3-mixed
 
 ## Generate a python3 armv7 root
