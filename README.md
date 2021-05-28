@@ -15,7 +15,7 @@ The goal is to build a Python wheel that can be installed on an Debian buster
 armhf system with "pip install".
 
 
-## Minimal rust code example
+## Minimal Rust code example
 
 I started with an example crate from the maturin project:
 
@@ -38,7 +38,7 @@ around debootstrap.
 
 ## Get a build environment
 
-To actually build the rust code, with cross compilation, etc. we need a
+To actually build the Rust code, with cross compilation, etc. we need a
 reliable build container. I followed a similar approach to my [previous
 exploration](https://gitlab.com/Spindel/rust-cross-example)
 
@@ -51,8 +51,8 @@ exploration](https://gitlab.com/Spindel/rust-cross-example)
 	RUN cargo install maturin
 
 These steps mean I have pretty much all I need available to cross-compile in a
-single container. Tee one thing remaining is to get the "armhf-lib" artifact
-from the first step into the rust compile container.
+single container. The one thing remaining is to get the "armhf-lib" artifact
+from the first step into the Rust compile container.
 
 In my local tests, that was solved by using volume mounts when running the
 container.
@@ -63,7 +63,7 @@ However, that isn't a suitable way for CI, so in my gitlab-ci configuration,
 I'm simply placing the /armhf-lib in my build container.
 
 
-## Build the stuff
+## Building the Wheel
 
 Building code with maturin was surprisingly simple and easy, once the
 cross-compilation environment was available:
