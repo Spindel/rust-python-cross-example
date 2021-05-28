@@ -1,0 +1,11 @@
+
+variables:
+  BUILD_CONTAINER: $CI_REGISTRY_IMAGE:build
+
+builder:
+  image: quay.io/containers/podman
+  stage: build
+  script:
+    - echo $CI_REGISTRY_PASSWORD | podman login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
+    - podman build -t $BUILD_CONTAINER .
+    - podman push $BUILD_CONTAINER
