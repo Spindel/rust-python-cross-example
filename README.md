@@ -32,7 +32,7 @@ To build against the python3 setup, we need a chroot with armhf python installat
 On my machine, I have qemu-user-static installed, so the above can be run in a
 simple debian container, and it will work.
 
-In CI, that wasn't an option, so the actual steps in my .gitlab-ci.yml differ
+In CI, that wasn't an option, so the actual steps in my [.gitlab-ci.yml](.gitlab-ci.yml) differ
 slightly, in that it uses qemu-user-static with the qemu-debootstrap wrapper
 around debootstrap.
 
@@ -59,7 +59,7 @@ container.
 
     podman run -ti --rm -v /tmp/armhf-lib:/armhf-lb:rw,Z -v $(pwd):/build:rw  rust
 
-However, that isn't a suitable way for CI, so in my gitlab-ci configuration,
+However, that isn't a suitable way for CI, so in my [gitlab-ci configuration](.gitlab-ci.yml),
 I'm simply placing the /armhf-lib in my build container.
 
 
