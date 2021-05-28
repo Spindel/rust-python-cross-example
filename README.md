@@ -19,15 +19,15 @@ armhf system with "pip install".
 
 I started with an example crate from the maturin project:
 
-	https://github.com/PyO3/maturin/tree/main/test-crates/pyo3-mixed
+    https://github.com/PyO3/maturin/tree/main/test-crates/pyo3-mixed
 
 ## Generate a python3 armv7 root
 
 To build against the python3 setup, we need a chroot with armhf python installation in:
 
-	apt-get update
-	apt-get install -y --no-install-recommends fakeroot debootstrap
-	fakeroot  debootstrap --arch=armhf --include=python3-minimal --variant=minbase buster  /armhf-lib
+    apt-get update
+    apt-get install -y --no-install-recommends fakeroot debootstrap
+    fakeroot  debootstrap --arch=armhf --include=python3-minimal --variant=minbase buster  /armhf-lib
 
 On my machine, I have qemu-user-static installed, so the above can be run in a
 simple debian container, and it will work.
@@ -42,13 +42,13 @@ To actually build the Rust code, with cross compilation, etc. we need a
 reliable build container. I followed a similar approach to my [previous
 exploration](https://gitlab.com/Spindel/rust-cross-example)
 
-	FROM docker.io/library/rust AS builder
-	RUN dpkg --add-architecture armhf
-	RUN apt-get update
-	RUN apt-get install -y --no-install-recommends curl git build-essential
-	RUN apt-get install -y --no-install-recommends libc6-armhf-cross libc6-dev-armhf-cross gcc-arm-linux-gnueabihf
-	RUN rustup target add armv7-unknown-linux-gnueabihf
-	RUN cargo install maturin
+    FROM docker.io/library/rust AS builder
+    RUN dpkg --add-architecture armhf
+    RUN apt-get update
+    RUN apt-get install -y --no-install-recommends curl git build-essential
+    RUN apt-get install -y --no-install-recommends libc6-armhf-cross libc6-dev-armhf-cross gcc-arm-linux-gnueabihf
+    RUN rustup target add armv7-unknown-linux-gnueabihf
+    RUN cargo install maturin
 
 These steps mean I have pretty much all I need available to cross-compile in a
 single container. The one thing remaining is to get the "armhf-lib" artifact
@@ -68,9 +68,9 @@ I'm simply placing the /armhf-lib in my build container.
 Building code with maturin was surprisingly simple and easy, once the
 cross-compilation environment was available:
 
-	cd /build
-	PYO3_CROSS_LIB_DIR=/armhf-lib/usr/lib/ cargo build --target armv7-unknown-linux-gnueabihf
-	PYO3_CROSS_LIB_DIR=/armhf-lib/usr/lib/ maturin build  --target armv7-unknown-linux-gnueabihf
+    cd /build
+    PYO3_CROSS_LIB_DIR=/armhf-lib/usr/lib/ cargo build --target armv7-unknown-linux-gnueabihf
+    PYO3_CROSS_LIB_DIR=/armhf-lib/usr/lib/ maturin build  --target armv7-unknown-linux-gnueabihf
 
 
 ### Test execute
@@ -78,11 +78,11 @@ cross-compilation environment was available:
 And to run the arm code, with podman (on my machine, where qemu-user-static- is installed)
 
 
-	podman run -ti --arch=arm --variant=v7 -v $(pwd):/build:rw,Z docker.io/arm32v7/debian:10
-		apt-get update
-		apt-get install -y --no-install-recommends  python3-minimal python3-pip
-		python3 -m pip install -U pip
-                python3 -m pip install /build/target/wheels/libspidtest-0.1.0-cp37-cp37m-manylinux_2_24_armv7l.whl
+    podman run -ti --arch=arm --variant=v7 -v $(pwd):/build:rw,Z docker.io/arm32v7/debian:10
+        apt-get update
+        apt-get install -y --no-install-recommends  python3-minimal python3-pip
+        python3 -m pip install -U pip
+        python3 -m pip install /build/target/wheels/libspidtest-0.1.0-cp37-cp37m-manylinux_2_24_armv7l.whl
 
 
 And that was pretty much it.
