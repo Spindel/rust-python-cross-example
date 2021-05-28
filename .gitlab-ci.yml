@@ -2,10 +2,51 @@
 variables:
   BUILD_CONTAINER: $CI_REGISTRY_IMAGE:build
 
+stages:
+  - prepare
+  - container
+  - build
+
+
+armhf-lib:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      changes:
+        - Dockerfile
+      when: manual
+      allow_failure: true
+  stage: prepare
+  image: debian:latest
+  script:
+    - apt-get update
+    - apt-get -y install qemu-user-static debootstrap fakeroot
+    - fakeroot qemu-debootstrap --arch=armhf --include=python3-minimal --variant=minbase buster armhf-lib
+  artifacts:
+    paths:
+      - armhf-lib
+
 builder:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      changes:
+        - Dockerfile
+      when: manual
+      allow_failure: true
+  stage: container
+  needs:
+    - armhf-lib
   image: quay.io/containers/podman
-  stage: build
   script:
     - echo $CI_REGISTRY_PASSWORD | podman login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
     - podman build -t $BUILD_CONTAINER .
     - podman push $BUILD_CONTAINER
+
+
+build:
+  stage: build
+  image: $BUILD_CONTAINER
+  script:
+    - maturin build --release --strip --target armv7-unknown-linux-gnueabihf
+  artifacts:
+    paths:
+      - target/wheels
