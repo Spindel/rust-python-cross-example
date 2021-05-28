@@ -77,11 +77,11 @@ cross-compilation environment was available:
 And to run the arm code, with podman (on my machine, where qemu-user-static- is installed)
 
 
-	podman run -ti --arch=arm --variant=v7 -v $(LIBDIR):/armhf-lib:rw,Z docker.io/arm32v7/debian:10
+	podman run -ti --arch=arm --variant=v7 -v $(pwd):/build:rw,Z docker.io/arm32v7/debian:10
 		apt-get update
 		apt-get install -y --no-install-recommends  python3-minimal python3-pip
 		python3 -m pip install -U pip
-                python3 -m pip install ./target/wheels/libspidtest-0.1.0-cp37-cp37m-manylinux_2_24_armv7l.whl
+                python3 -m pip install /build/target/wheels/libspidtest-0.1.0-cp37-cp37m-manylinux_2_24_armv7l.whl
 
 
 And that was pretty much it.
