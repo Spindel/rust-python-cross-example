@@ -1,9 +1,12 @@
 # Cross Compiling a Rust + Python project in GitLab CI
 
 
-So, this project doesn't do anything completely unique. It is an attempt to
-get a sustainable CI/CD pipeline set up  targetting armhf (arm32, armv7, etc)
-Debian compatible Python wheels in GitLab CI.
+So, this project doesn't do anything in and of itself. It is meant to be
+documentation for how to build mixed Rust+Python code that can be installed on
+weaker devices. 
+
+It sets up a sustainable CI/CD pipeline set up targetting armhf (arm32, armv7,
+etc) Debian compatible Python wheels in GitLab CI.
 
 This project uses the following:
 
@@ -13,6 +16,9 @@ This project uses the following:
 
 The goal is to build a Python wheel that can be installed on an Debian buster
 armhf system with "pip install".
+
+If you wish to build cross compile your own Python+Rust code, this project and
+README should be a good starting point.
 
 
 ## Minimal Rust code example
